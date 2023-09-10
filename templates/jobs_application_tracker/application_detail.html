@@ -1,0 +1,44 @@
+{%extends 'base.html'%} {%block title%}Selected Application{% endblock title%}
+{% block content %}
+<div>
+  <img src="" class="mb-5" id="company_logo" height="300px" width="300px" />
+</div>
+<div
+  class="card-body bg-white"
+  style="color: black; border-radius: 1em; padding: 2em"
+>
+  <h5 class="card-title">{{ object.company_name }}</h5>
+  <h6 class="card-subtitle mb-2 text-muted">{{ object.job_title }}</h6>
+  <p class="card-text">{{ object.job_description }}</p>
+  <h6 href="#" class="card-link">{{ object.expected_salary }}JD</h6>
+  <p class="card-text" style="color:#909090">{{object.created_at}}</p>
+</div>
+<div>
+  <span>
+  <a name="" id="" class="btn btn-primary my-2 mx-2" href="{% url 'jobs:update' object.pk %}" role="button">Edit</a>
+</span>
+<span>
+<form method="POST" action='{% url "jobs:delete" object.pk %}' style="display: inline-block;">
+  {% csrf_token %}<input type="submit" value="delete" class = "btn btn-danger">
+</form>
+</span>
+
+</div>
+<script>
+  var name = "{{object.company_name}}";
+  console.log(name);
+  $.ajax({
+    method: "GET",
+    url: "https://api.api-ninjas.com/v1/logo?name=" + name,
+    headers: { "X-Api-Key": "BOvL9U0oMMJj4Nc8ppBu6A==lgfyv5PqNLUpTsv0" },
+    contentType: "application/json",
+    success: function (result) {
+      console.log(result);
+      $("#company_logo").attr("src", result[0]["image"]);
+    },
+    error: function ajaxError(jqXHR) {
+      console.error("Error: ", jqXHR.responseText);
+    },
+  });
+</script>
+{% endblock content %}
